@@ -1,10 +1,12 @@
-﻿  schoolClass.cpp
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(29,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(52,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(72,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(74,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(84,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(115,20): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\schoolClass.cpp(149,20): warning C4018: '<': signed/unsigned mismatch
+﻿  Main.cpp
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(73,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(91,38): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(109,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(177,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(180,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(188,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(195,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(203,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\WOLF\source\repos\SchoolTimetable\SchoolTimetable\Main.cpp(212,20): warning C4018: '<': signed/unsigned mismatch
   SchoolTimetable.vcxproj -> C:\Users\WOLF\source\repos\SchoolTimetable\Debug\SchoolTimetable.exe

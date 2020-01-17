@@ -8,6 +8,7 @@
 
 using namespace std;
 
+int st[1000];
 
 schoolClass::schoolClass(string name, int hours, int subjectsNr)
 {
@@ -37,7 +38,7 @@ void schoolClass::generateRandomTimetable()
 	while(i<nrHours)
 	{
 		int subjectNr = rand() % this->nrSubjects;
-		int day = rand() % 5;
+		int day = rand() % NR_DAYS;
 		//cout <<day<<" "<<hour<<" "<< timetable[day][hour] << " " << this->subjects[subjectNr].second <<endl;
 		if (timetable[day][hour] == "Break" && this->subjects[subjectNr].second>0)
 		{
@@ -45,7 +46,7 @@ void schoolClass::generateRandomTimetable()
 			timetable[day][hour] = this->subjects[subjectNr].first;
 			this->subjects[subjectNr].second--;
 			i++;
-			if (i % 5 == 0) hour += 1;
+			if (i % NR_DAYS == 0) hour += 1;
 		}
 	}
 	//cout << endl;
@@ -60,22 +61,24 @@ void schoolClass::generateRandomTimetable()
 
 void schoolClass::initialiseTimtable()
 {
-	for (int i = 0; i < 6; i++)
-		for (int j = 0; j < 8; j++)
+	for (int i = 0; i < NR_DAYS+1; i++)
+		for (int j = 0; j < MAX_NR_HOURS+1; j++)
 			this->timetable[i][j] = "Break";
 }
 
 void schoolClass::generateAllTimetables() {
 	allSubjectsVectorSetting();
+	//for (int i = 0; i < allSubjects.size(); i++)
+	//	cout << allSubjects[i] << " ";
+	//cout << endl;
 	bkt(0);
 	cout << timetablesTable.size()<<endl;
-	for (int i = 0; i < timetablesTable.size(); i++)
-	{
-		for (int j = 0; j < timetablesTable[i].size(); j++)
-			cout << timetablesTable[i][j] << "|";
-		cout << endl;
-	}
-	cleanVectorTimetables();
+	//for (int i = 0; i < timetablesTable.size(); i++)
+	//{
+	//	for (int j = 0; j < timetablesTable[i].size(); j++)
+	//		cout << timetablesTable[i][j] << "|";
+	//	cout << endl;
+	//}
 }
 
 void schoolClass::allSubjectsVectorSetting()
@@ -96,26 +99,30 @@ void schoolClass::tipar(int p)
 	vector<string> newTimeTable;
 	timetablesTable.push_back(newTimeTable);
 	for (j = 0; j < p; j++)
-		 timetablesTable[timetablesTable.size()-1].push_back(allSubjects[j]);
+		 timetablesTable[timetablesTable.size()-1].push_back(allSubjects[st[j]]);
 }
 
 int schoolClass::valid(int p)
 {
+	//for (int i = 0; i < allSubjects.size(); i++)
+	//	cout << allSubjects[st[i]] << " ";
+	//cout << endl;
 	int i, ok;
 	ok = 1;
 	for (i = 0; i < p-1; i++)
-		if (allSubjects[p] == allSubjects[i])
+		if (st[p-1] == st[i])
 			ok = 0;
 	return ok;
 }
-
 void schoolClass::bkt(int p)
 {
 	int val;
-	for (val = 0; val <= allSubjects.size(); val++)
+	for (val = 0; val < allSubjects.size(); val++)
 	{
+		st[p] = val;
+
 		if (valid(p))
-			if (p==allSubjects.size())
+			if (p==allSubjects.size()-1)
 				tipar(p);
 			else
 				bkt(p + 1);
@@ -124,10 +131,10 @@ void schoolClass::bkt(int p)
 
 void schoolClass::cleanVectorTimetables()
 {
-	int i = 0;
+	/*int i = 0;
 	int dim = timetablesTable.size();
 	while (i < dim){
-		if (timetablesTable[i].size() < 35) { 
+		if (timetablesTable[i].size() < 7) { 
 			timetablesTable.erase(timetablesTable.begin() + i); 
 			dim--; 
 			i--; 
@@ -141,24 +148,33 @@ void schoolClass::cleanVectorTimetables()
 			i--;
 		}
 		i++;
-	}
+	}*/
 }
 
 bool schoolClass::checkIfTimetableIsValid(vector<string> timeTable)
 {
-	for (int i = 0; i < timeTable.size(); i += 7)
+	for (int i = 0; i < timeTable.size(); i += MAX_NR_HOURS)
 	{
 		bool breakBool=true;
 		int cont = 0;
-		for (int j = i; j < i + 7; j++)
+		for (int j = i; j < i + MAX_NR_HOURS; j++)
 		{
 			if (timeTable[j] == " " and breakBool == true) breakBool = false;
 			if (timeTable[j] != " " and breakBool == false) return false;
 			if (breakBool) cont++;
 		}
-		if (cont < 4) return false;
+		if (cont < MAX_NR_HOURS/2) return false;
 	}
 	return true;
 
 }
 
+void schoolClass::setTimeTable() {
+	
+	this->initialiseTimtable();
+	for (int i = 0; i < timetablesTable[indexTimeTablesTable].size(); i += MAX_NR_HOURS)
+		for (int j = i; j < i + MAX_NR_HOURS; j++)
+			timetable[i / MAX_NR_HOURS][j-i] = timetablesTable[indexTimeTablesTable][j-i];
+
+	indexTimeTablesTable += 1;
+}

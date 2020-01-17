@@ -11,6 +11,9 @@ ofstream fout("output.out");
 vector<pair<schoolClass,bool>> schoolClasses;
 int nrClasses;
 
+int NR_DAYS = 2;
+int MAX_NR_HOURS = 3;
+
 void readingInput() {
 	string nr;
 	getline(fin, nr);
@@ -73,9 +76,9 @@ void printAfterRead() {
 			cout << schoolClasses[i].first.subjects[j].first << " " << schoolClasses[i].first.subjects[j].second << endl;
 		cout << endl << endl;*/
 		cout << "Timetable" << endl;
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < NR_DAYS; j++)
 		{
-			for (int x = 0; x < 7; x++)
+			for (int x = 0; x < MAX_NR_HOURS; x++)
 				cout << schoolClasses[i].first.timetable[j][x] << " ";
 			cout << endl;
 		}
@@ -88,8 +91,8 @@ bool verifyTimetablesCollisions(int secondIndex) {
 	for (int firstIndex = 0; firstIndex < schoolClasses.size() && secondIndex!=firstIndex; firstIndex++) {
 		if (schoolClasses[firstIndex].second == true)
 		{
-			for (int i = 0; i < 5; i++)
-				for (int j = 0; j < 8; j++)
+			for (int i = 0; i < NR_DAYS; i++)
+				for (int j = 0; j < MAX_NR_HOURS+1; j++)
 				{
 					if (schoolClasses[firstIndex].first.timetable[i][j] == schoolClasses[secondIndex].first.timetable[i][j] 
 						&& schoolClasses[secondIndex].first.timetable[i][j] != "Break")
@@ -112,17 +115,17 @@ void permuteSchedule(int index) {
 	int i = 0;
 	int j = 0;
 	vector<string> aux;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < NR_DAYS; i++)
 	{
 		aux.push_back(schoolClasses[index].first.timetable[i][0]);
-		for (int j = 0; j < 6; j++)
+		for (int j = 0; j < MAX_NR_HOURS-1; j++)
 			if(schoolClasses[index].first.timetable[i][j+1]!="Break")
 			schoolClasses[index].first.timetable[i][j] = schoolClasses[index].first.timetable[i][j + 1];
 	}
 	aux.push_back(aux[0]);
 
-	for (int i = 0; i < 5; i++)
-		for (int j = 0; j < 7; j++)
+	for (int i = 0; i < NR_DAYS; i++)
+		for (int j = 0; j < MAX_NR_HOURS; j++)
 			if (schoolClasses[index].first.timetable[i][j + 1] == "Break")
 			{
 				schoolClasses[index].first.timetable[i][j] = aux[i+1];
@@ -135,11 +138,12 @@ void fixingSchedule(int index) {
 	//int cont2 = 0;
 	cout << index << endl;
 	while (verifyTimetablesCollisions(index)) {
-		permuteSchedule(index);
+		//permuteSchedule(index);
+		schoolClasses[index].first.setTimeTable();
 		cont++;
-		if (cont == schoolClasses[index].first.nrHours) {
-			cont = 0;
-			schoolClasses[index].first.generateRandomTimetable();
+		if (schoolClasses[index].first.timetablesTable.size()-1 == schoolClasses[index].first.indexTimeTablesTable) {
+			break;
+			//schoolClasses[index].first.generateRandomTimetable();
 			//cont2++;
 		}
 		//if (cont2 == 4000) {
@@ -173,45 +177,41 @@ int main() {
 	srand(time(NULL));
 	readingInput();
 	//printAfterRead();
-	schoolClasses[0].first.generateAllTimetables();
-	vector<vector<string>> timetables = schoolClasses[0].first.timetablesTable;
-	for (int i = 0; i < timetables.size(); i++)
+	for (int i = 0; i < schoolClasses.size(); i++)
 	{
-		for (int j = 0; j < timetables[i].size(); j++)
-			cout << timetables[i][j] << " ";
-		cout << endl;
+		schoolClasses[i].first.generateAllTimetables();
 	}
-	//vector<int> indexes = verifyAll();
-	//while (indexes.size() > 0)
-	//{
-	//	int nrthreads = indexes.size();
-	//	for (int i = 0; i < schoolClasses.size(); i++)
-	//	{
-	//		if (find(indexes.begin(), indexes.end(), i) == indexes.end())
-	//			schoolClasses[i].second = true;
-	//		else schoolClasses[i].second = false;
-	//	}
-	//	cout << endl << "INDEXES: ";
-	//	for (int u = 0; u < indexes.size(); u++)
-	//		cout << indexes[u] << " ";
-	//	cout << endl;
+	vector<int> indexes = verifyAll();
+	while (indexes.size() > 0)
+	{
+		int nrthreads = indexes.size();
+		for (int i = 0; i < schoolClasses.size(); i++)
+		{
+			if (find(indexes.begin(), indexes.end(), i) == indexes.end())
+				schoolClasses[i].second = true;
+			else schoolClasses[i].second = false;
+		}
+		cout << endl << "INDEXES: ";
+		for (int u = 0; u < indexes.size(); u++)
+			cout << indexes[u] << " ";
+		cout << endl;
 
-	//	vector<thread> threads;
-	//	for (int i = 0; i < nrthreads; i++)
-	//		threads.push_back(thread(fixingSchedule, indexes[i]));
+		vector<thread> threads;
+		for (int i = 0; i < nrthreads; i++)
+			threads.push_back(thread(fixingSchedule, indexes[i]));
 
-	//	for (int i = 0; i < threads.size(); i++)
-	//		threads[i].join();
-	//	indexes = verifyAll();
-	//}
-	///*for (int i = 1; i < schoolClasses.size(); i++)
-	//	normal(i);
+		for (int i = 0; i < threads.size(); i++)
+			threads[i].join();
+		indexes = verifyAll();
+	}
+	/*for (int i = 1; i < schoolClasses.size(); i++)
+		normal(i);
 
-	//printAfterRead();*/
-	//indexes = verifyAll();
-	//for (int i = 0; i < indexes.size();i++) {
-	//	cout << indexes[i];
-	//}
-	//printAfterRead();
+	printAfterRead();*/
+	indexes = verifyAll();
+	for (int i = 0; i < indexes.size();i++) {
+		cout << indexes[i];
+	}
+	printAfterRead();
 	return 0;
 }
